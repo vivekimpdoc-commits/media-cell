@@ -3,10 +3,10 @@ import { Mic, FileAudio, Edit, FileSearch, AlertCircle, Zap, Video, MapPin, Radi
 
 const AITools = () => {
   const [activeTab, setActiveTab] = useState<'voice' | 'legal' | 'image' | 'hashtag' | 'tv' | 'heatmap'>('voice');
-  const [transcript, setTranscript] = useState('');
-  const [notice, setNotice] = useState('');
-  const [imageResult, setImageResult] = useState('');
-  const [hashtagResult, setHashtagResult] = useState('');
+  const [transcript, setTranscript] = useState('Sample transcription: ... Hate speech detected: "xyz"');
+  const [notice, setNotice] = useState('Legal Notice (IT Act Sec.66):\nOffender @offender_handle has posted defamatory content. Immediate removal required.');
+  const [imageResult, setImageResult] = useState('Image matches found: 3 similar images from 2021 news archives.');
+  const [hashtagResult, setHashtagResult] = useState('Suggested positive posts: \n#SupportPolice \n#StaySafe');
 
   const mockProcess = (setter: (val: string) => void, label: string) => {
     setter('Processing...');

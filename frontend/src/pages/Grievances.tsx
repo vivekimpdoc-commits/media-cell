@@ -40,6 +40,7 @@ const Grievances = () => {
 
       {activeTab === 'pending' && (
         <div className="grid-2 fade-in" style={{ gridTemplateColumns: '2fr 1fr' }}>
+          <div className="stat-trend">Target: &lt;5m</div>
           <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column' }}>
             <h3 className="section-title">Public Ticket Queue</h3>
             

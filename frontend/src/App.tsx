@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink, useLocation } from 'react-router-dom';
-import { Shield, Activity, Map, MessageSquareWarning, Megaphone, LayoutDashboard, Video, Users, Globe, AlertCircle, Smartphone, Scan, Target, CalendarClock, Star } from 'lucide-react';
+import { Shield, Activity, Map, MessageSquareWarning, Megaphone, LayoutDashboard, Video, Users, Globe, AlertCircle, Smartphone, Scan, Target, CalendarClock, Star, Zap } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import './index.css';
 

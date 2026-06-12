@@ -1,20 +1,62 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AlertTriangle, TrendingUp, Search, Activity, FileWarning, BarChart2 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const SocialIntel = () => {
   const [activeTab, setActiveTab] = useState<'monitoring' | 'fakenews' | 'sentiment'>('monitoring');
 
-  // Mock sentiment data for the detailed sentiment analysis tab
-  const sentimentHistory = [
-    { day: 'Mon', positive: 4000, negative: 2400, neutral: 2400 },
-    { day: 'Tue', positive: 3000, negative: 1398, neutral: 2210 },
-    { day: 'Wed', positive: 2000, negative: 9800, neutral: 2290 },
-    { day: 'Thu', positive: 2780, negative: 3908, neutral: 2000 },
-    { day: 'Fri', positive: 1890, negative: 4800, neutral: 2181 },
-    { day: 'Sat', positive: 2390, negative: 3800, neutral: 2500 },
-    { day: 'Sun', positive: 3490, negative: 4300, neutral: 2100 },
-  ];
+  // State for real data
+  const [sentimentHistory, setSentimentHistory] = useState([]);
+  const [feed, setFeed] = useState([]);
+  const [fakeNews, setFakeNews] = useState([]);
+
+  // Fetch data from backend on mount
+  useEffect(() => {
+    // Sentiment history
+    fetch('/api/social-intel/sentiment-history')
+      .then(res => res.json())
+      .then(data => setSentimentHistory(data))
+      .catch(err => console.error('Sentiment fetch error:', err));
+    // Live feed
+    fetch('/api/social-intel/live-feed')
+      .then(res => res.json())
+      .then(data => setFeed(data))
+      .catch(err => console.error('Live feed fetch error:', err));
+    // Fake news
+    fetch('/api/social-intel/fake-news')
+      .then(res => res.json())
+      .then(data => setFakeNews(data))
+      .catch(err => console.error('Fake news fetch error:', err));
+  }, []);
+
+  // Handle file upload
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    const fileInput = e.target.elements.file;
+    if (!fileInput.files.length) return;
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await res.json();
+      // prepend new item to feed
+      const newItem = {
+        text: `User uploaded media`,
+        platform: 'User',
+        sentiment: 'Neutral',
+        risk: 'Low',
+        mediaUrl: result.url,
+      };
+      setFeed(prev => [newItem, ...prev]);
+      alert('Upload successful');
+    } catch (err) {
+      console.error('Upload error:', err);
+      alert('Upload failed');
+    }
+  };
 
   return (
     <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '2rem', height: '100%' }}>
@@ -90,17 +132,25 @@ const SocialIntel = () => {
               </div>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {[
-                  { text: "Protest planned near the main highway tomorrow.", platform: "X", sentiment: "Negative", risk: "High" },
-                  { text: "Great job by the local police returning my lost wallet.", platform: "Facebook", sentiment: "Positive", risk: "Low" },
-                  { text: "Video showing communal tension in sector 4. Looks morphed.", platform: "WhatsApp", sentiment: "Negative", risk: "Critical" },
-                ].map((post, idx) => (
+                {/* Upload Section */}
+                <div className="glass-panel" style={{ padding: '1rem', marginBottom: '1rem' }}>
+                  <form onSubmit={handleUpload}>
+                    <input type="file" name="file" accept="image/*,video/*" style={{ marginBottom: '0.5rem' }} />
+                    <button type="submit" style={{ background: 'var(--primary-accent)', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer' }}>Upload Media</button>
+                  </form>
+                </div>
+                {feed.map((post, idx) => (
                   <div key={idx} style={{ padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', borderLeft: `4px solid ${post.risk === 'Critical' ? 'var(--alert-red)' : post.risk === 'High' ? 'var(--warning-yellow)' : 'var(--success-green)'}` }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                       <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{post.platform} • Just now</span>
                       <span style={{ fontSize: '0.8rem', padding: '2px 8px', borderRadius: '12px', background: 'rgba(255,255,255,0.1)' }}>{post.sentiment}</span>
                     </div>
-                    <p style={{ fontSize: '0.95rem' }}>"{post.text}"</p>
+                    <p style={{ fontSize: '0.95rem' }}>{post.text}</p>
+                    {post.mediaUrl && (
+                      <div style={{ marginTop: '8px' }}>
+                        <img src={post.mediaUrl} alt="uploaded" style={{ maxWidth: '100%', borderRadius: '4px' }} />
+                      </div>
+                    )}
                     {post.risk === 'Critical' && (
                       <div style={{ marginTop: '10px', fontSize: '0.8rem', color: 'var(--alert-red)', display: 'flex', alignItems: 'center', gap: '5px' }}>
                         <AlertTriangle size={14} /> AI Flag: Potential Morphed Media. Origin tracing initiated.
@@ -140,11 +190,19 @@ const SocialIntel = () => {
         <div className="glass-panel fade-in" style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
             <h3 className="section-title" style={{margin: 0}}>Public & Media Sentiment Analysis</h3>
-            <select style={{ background: 'var(--bg-dark)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '5px 10px', borderRadius: '4px' }}>
-              <option>Last 7 Days</option>
-              <option>Last 30 Days</option>
-              <option>This Year</option>
-            </select>
+            <select style={{ background: 'var(--bg-dark)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '5px 10px', borderRadius: '4px' }} onChange={e => {
+                // Simple filter placeholder – you can extend this later
+                const range = e.target.value;
+                // For now we just re-fetch the same data
+                fetch('/api/social-intel/sentiment-history')
+                  .then(r => r.json())
+                  .then(data => setSentimentHistory(data))
+                  .catch(err => console.error(err));
+              }}>
+                <option>Last 7 Days</option>
+                <option>Last 30 Days</option>
+                <option>This Year</option>
+              </select>
           </div>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
             Tracks the overall attitude of the public and media outlets towards police actions over time.
@@ -194,11 +252,7 @@ const SocialIntel = () => {
               </tr>
             </thead>
             <tbody>
-              {[
-                { content: "Massive gathering planned at Central Park violating section 144.", platform: "WhatsApp Groups", spread: "High (200+ shares/hr)", status: "Debunked", aiConf: "99%" },
-                { content: "Police using excessive force during peaceful march in south zone.", platform: "X (Twitter)", spread: "Critical (Viral)", status: "Investigating", aiConf: "54%" },
-                { content: "Fake circular regarding new traffic fines.", platform: "Facebook", spread: "Medium", status: "Debunked", aiConf: "95%" }
-              ].map((fn, i) => (
+              {fakeNews.map((fn, i) => (
                 <tr key={i} style={{ borderBottom: '1px solid var(--border-color)' }}>
                   <td style={{ padding: '12px', maxWidth: '300px' }}>"{fn.content}"</td>
                   <td style={{ padding: '12px' }}>{fn.platform}</td>
