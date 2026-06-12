@@ -2,13 +2,19 @@ import React, { useState } from 'react';
 import { Contact, Search, Phone, Mail, Image as ImageIcon, Star, PlusCircle } from 'lucide-react';
 
 const InternalOps = () => {
-  const [activeTab, setActiveTab] = useState<'directory' | 'gallery'>('directory');
+  const [activeTab, setActiveTab] = useState<'directory' | 'gallery' | 'influencers'>('directory');
 
   const journalists = [
     { name: "Rahul Sharma", outlet: "Dainik Jagran", type: "Local", phone: "+91 98765 43210", email: "rahul.s@jagran.com" },
     { name: "Anita Desai", outlet: "NDTV", type: "National", phone: "+91 98765 43211", email: "anita.d@ndtv.com" },
     { name: "Vikram Singh", outlet: "Amar Ujala", type: "Local", phone: "+91 98765 43212", email: "vikram.s@amarujala.com" },
     { name: "Priya Patel", outlet: "Times of India", type: "National", phone: "+91 98765 43213", email: "priya.p@toi.com" }
+  ];
+
+  const influencers = [
+    { name: "UP Updates (Ravi)", platform: "YouTube", reach: "1.2M Subs", zone: "Lucknow", status: "Collaborated" },
+    { name: "Kanpur Meme Page", platform: "Instagram", reach: "850K Followers", zone: "Kanpur", status: "Pending" },
+    { name: "Varanasi Voice", platform: "Facebook", reach: "500K Likes", zone: "Varanasi", status: "Active Partner" },
   ];
 
   const galleryItems = [
@@ -33,6 +39,17 @@ const InternalOps = () => {
           }}
         >
           <Contact size={20} /> Media Directory
+        </button>
+        <button 
+          onClick={() => setActiveTab('influencers')}
+          style={{ 
+            background: 'transparent', border: 'none', color: activeTab === 'influencers' ? 'var(--primary-accent)' : 'var(--text-secondary)', 
+            fontSize: '1.1rem', fontWeight: 'bold', cursor: 'pointer', padding: '8px 16px',
+            borderBottom: activeTab === 'influencers' ? '2px solid var(--primary-accent)' : '2px solid transparent',
+            display: 'flex', alignItems: 'center', gap: '8px'
+          }}
+        >
+          <Star size={20} /> Influencer Outreach
         </button>
         <button 
           onClick={() => setActiveTab('gallery')}
@@ -81,6 +98,50 @@ const InternalOps = () => {
                   </td>
                   <td style={{ padding: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={14} color="var(--text-secondary)"/> {j.phone}</td>
                   <td style={{ padding: '12px' }}><Mail size={14} color="var(--text-secondary)" style={{marginRight: '8px', verticalAlign: 'middle'}}/>{j.email}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {activeTab === 'influencers' && (
+        <div className="glass-panel fade-in" style={{ padding: '1.5rem', flex: 1 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <h3 style={{ margin: 0, color: 'var(--primary-accent)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Star /> Influencer Outreach Program
+            </h3>
+            <button style={{ background: 'var(--primary-accent)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}>
+              + Add Influencer
+            </button>
+          </div>
+          
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+            <thead>
+              <tr style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)' }}>
+                <th style={{ padding: '12px' }}>Channel/Name</th>
+                <th style={{ padding: '12px' }}>Platform</th>
+                <th style={{ padding: '12px' }}>Reach</th>
+                <th style={{ padding: '12px' }}>Zone</th>
+                <th style={{ padding: '12px' }}>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {influencers.map((inf, i) => (
+                <tr key={i} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                  <td style={{ padding: '12px', fontWeight: 'bold' }}>{inf.name}</td>
+                  <td style={{ padding: '12px' }}>{inf.platform}</td>
+                  <td style={{ padding: '12px', color: 'var(--primary-accent)' }}>{inf.reach}</td>
+                  <td style={{ padding: '12px' }}>{inf.zone}</td>
+                  <td style={{ padding: '12px' }}>
+                    <span style={{ 
+                      background: inf.status === 'Collaborated' || inf.status === 'Active Partner' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)', 
+                      color: inf.status === 'Collaborated' || inf.status === 'Active Partner' ? 'var(--success-green)' : 'var(--warning-yellow)', 
+                      padding: '4px 8px', borderRadius: '12px', fontSize: '0.8rem' 
+                    }}>
+                      {inf.status}
+                    </span>
+                  </td>
                 </tr>
               ))}
             </tbody>
