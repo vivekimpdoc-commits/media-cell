@@ -19,6 +19,7 @@ const resources = {
       "menu.crisisEvents": "Crisis & Events",
       "menu.digitalWarriors": "Digital Warriors",
       "menu.internalOps": "Internal Ops",
+      "menu.aiTools": "AI Tools",
       "header.systemActive": "SYSTEM ACTIVE",
       "header.commandingOfficer": "Commanding Officer",
       "header.hqAccess": "HQ Access",
@@ -36,6 +37,7 @@ const resources = {
       "title.crisis": "Crisis Response & Event Coverage",
       "title.warriors": "Digital Volunteers Network",
       "title.internal": "Internal Operations & Influencer Database",
+      "title.aiTools": "AI‑Powered Tools",
       "dash.activeThreats": "Active Threats Detected",
       "dash.postsAnalyzed": "Posts Analyzed (24h)",
       "dash.fakeNews": "Fake News Alerts",
@@ -61,6 +63,7 @@ const resources = {
       "menu.crisisEvents": "क्राइसिस व इवेंट",
       "menu.digitalWarriors": "डिजिटल वारियर्स",
       "menu.internalOps": "आंतरिक कार्य",
+      "menu.aiTools": "एआई टूल्स",
       "header.systemActive": "सिस्टम सक्रिय है",
       "header.commandingOfficer": "कमांडिंग ऑफिसर",
       "header.hqAccess": "मुख्यालय पहुँच",
@@ -78,10 +81,11 @@ const resources = {
       "title.crisis": "क्राइसिस रिस्पॉन्स और इवेंट कवरेज",
       "title.warriors": "डिजिटल वॉलंटियर्स नेटवर्क",
       "title.internal": "आंतरिक संचालन और इन्फ्लुएंसर डेटाबेस",
+      "title.aiTools": "एआई‑संचालित टूल्स",
       "dash.activeThreats": "सक्रिय खतरे पहचाने गए",
       "dash.postsAnalyzed": "पोस्ट विश्लेषित (24 घंटे)",
       "dash.fakeNews": "फेक न्यूज अलर्ट",
-      "dash.openGrievances": "लंबित शिकायतें",
+      "dash.openGrievences": "लंबित शिकायतें",
       "dash.liveSentiment": "लाइव सेंटीमेंट ट्रेंड",
       "dash.emotionDist": "वर्तमान भावना वितरण"
     }
@@ -92,11 +96,9 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: "en", // default language
+    lng: "en",
     fallbackLng: "en",
-    interpolation: {
-      escapeValue: false 
-    }
+    interpolation: { escapeValue: false }
   });
 
 export default i18n;

@@ -18,6 +18,7 @@ const DigitalPR = React.lazy(() => import('./pages/DigitalPR'));
 const CrisisManagement = React.lazy(() => import('./pages/CrisisManagement'));
 const DigitalWarriors = React.lazy(() => import('./pages/DigitalWarriors'));
 const InternalOps = React.lazy(() => import('./pages/InternalOps'));
+const AITools = React.lazy(() => import('./pages/AITools'));
 
 const Sidebar = () => {
   const { t } = useTranslation();
@@ -80,6 +81,10 @@ const Sidebar = () => {
         <NavLink to="/internal" className={({isActive}) => `nav-item ${isActive ? 'active' : ''}`}>
           <Users size={20} />
           <span>{t('menu.internalOps')}</span>
+        </NavLink>
+        <NavLink to="/ai-tools" className={({isActive}) => `nav-item ${isActive ? 'active' : ''}`}>
+          <Zap size={20} color="#8b5cf6" />
+          <span style={{ color: '#8b5cf6' }}>{t('menu.aiTools')}</span>
         </NavLink>
       </nav>
     </div>
@@ -180,6 +185,7 @@ function App() {
                 <Route path="/pr" element={<DigitalPR />} />
                 <Route path="/crisis" element={<CrisisManagement />} />
                 <Route path="/internal" element={<InternalOps />} />
+                <Route path="/ai-tools" element={<AITools />} />
               </Routes>
             </React.Suspense>
           </div>
