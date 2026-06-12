@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AlertTriangle, TrendingUp, Search, Activity, FileWarning, BarChart2 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const SocialIntel = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'monitoring' | 'fakenews' | 'sentiment'>('monitoring');
 
   // State for real data
@@ -72,7 +74,7 @@ const SocialIntel = () => {
             display: 'flex', alignItems: 'center', gap: '8px'
           }}
         >
-          <Activity size={20} /> Live Monitoring
+          <Activity size={20} /> {t('social.liveMonitoring')}
         </button>
         <button 
           onClick={() => setActiveTab('sentiment')}
@@ -83,7 +85,7 @@ const SocialIntel = () => {
             display: 'flex', alignItems: 'center', gap: '8px'
           }}
         >
-          <BarChart2 size={20} /> Detailed Sentiment
+          <BarChart2 size={20} /> {t('social.detailedSentiment')}
         </button>
         <button 
           onClick={() => setActiveTab('fakenews')}
@@ -94,7 +96,7 @@ const SocialIntel = () => {
             display: 'flex', alignItems: 'center', gap: '8px'
           }}
         >
-          <FileWarning size={20} /> Fake News Tracker
+          <FileWarning size={20} /> {t('social.fakeNewsTracker')}
         </button>
       </div>
 
@@ -102,7 +104,7 @@ const SocialIntel = () => {
         <div className="fade-in">
           <div className="grid-3" style={{ marginBottom: '2rem' }}>
             <div className="glass-panel stat-card">
-              <div className="stat-title">Platform Monitored</div>
+              <div className="stat-title">{t('social.platformMonitored')}</div>
               <div className="stat-value" style={{fontSize: '1.5rem', marginTop: '10px'}}>
                 <span style={{color: '#1DA1F2', marginRight: '10px'}}>X (Twitter)</span>
                 <span style={{color: '#4267B2', marginRight: '10px'}}>Facebook</span>
@@ -110,12 +112,12 @@ const SocialIntel = () => {
               </div>
             </div>
             <div className="glass-panel stat-card">
-              <div className="stat-title">Deepfake / Bot Alerts</div>
+              <div className="stat-title">{t('social.deepfakeAlerts')}</div>
               <div className="stat-value" style={{color: 'var(--alert-red)'}}>24 Detected</div>
               <div className="stat-trend trend-up">AI Confidence: 94%</div>
             </div>
             <div className="glass-panel stat-card">
-              <div className="stat-title">Dark Web Mentions</div>
+              <div className="stat-title">{t('social.darkWebMentions')}</div>
               <div className="stat-value" style={{color: 'var(--warning-yellow)'}}>3 Hits</div>
               <div className="stat-trend trend-up">Keywords: "Arms", "Leak"</div>
             </div>
@@ -127,7 +129,7 @@ const SocialIntel = () => {
                 <h3 className="section-title" style={{margin: 0}}>Live Feed Analysis</h3>
                 <div style={{ display: 'flex', gap: '10px', background: 'rgba(255,255,255,0.05)', padding: '6px 12px', borderRadius: '20px', alignItems: 'center' }}>
                   <Search size={16} color="var(--text-secondary)" />
-                  <input type="text" placeholder="Search keywords..." style={{ background: 'transparent', border: 'none', color: 'var(--text-primary)', outline: 'none' }} />
+                  <input type="text" placeholder={t('social.searchPlaceholder')} style={{ background: 'transparent', border: 'none', color: 'var(--text-primary)', outline: 'none' }} />
                 </div>
               </div>
               
@@ -136,7 +138,7 @@ const SocialIntel = () => {
                 <div className="glass-panel" style={{ padding: '1rem', marginBottom: '1rem' }}>
                   <form onSubmit={handleUpload}>
                     <input type="file" name="file" accept="image/*,video/*" style={{ marginBottom: '0.5rem' }} />
-                    <button type="submit" style={{ background: 'var(--primary-accent)', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer' }}>Upload Media</button>
+                    <button type="submit" style={{ background: 'var(--primary-accent)', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer' }}>{t('social.uploadMedia')}</button>
                   </form>
                 </div>
                 {feed.map((post, idx) => (
@@ -162,7 +164,7 @@ const SocialIntel = () => {
             </div>
 
             <div className="glass-panel" style={{ padding: '1.5rem' }}>
-              <h3 className="section-title">Trending Hashtags</h3>
+              <h3 className="section-title">{t('social.liveFeedAnalysis')}</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {[
                   { tag: "#TrafficJam", count: "12.4K", trend: "up" },
@@ -199,9 +201,9 @@ const SocialIntel = () => {
                   .then(data => setSentimentHistory(data))
                   .catch(err => console.error(err));
               }}>
-                <option>Last 7 Days</option>
-                <option>Last 30 Days</option>
-                <option>This Year</option>
+                <option>{t('social.last7Days')}</option>
+                <option>{t('social.last30Days')}</option>
+                <option>{t('social.thisYear')}</option>
               </select>
           </div>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
@@ -237,18 +239,18 @@ const SocialIntel = () => {
         <div className="glass-panel fade-in" style={{ padding: '1.5rem', flex: 1 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
             <h3 className="section-title" style={{margin: 0, color: 'var(--alert-red)'}}>
-              <FileWarning style={{marginRight: '8px'}} /> Fake News & Rumor Tracker
+              <FileWarning style={{marginRight: '8px'}} /> {t('social.fakeNewsAndRumorTracker')}
             </h3>
           </div>
           
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead>
               <tr style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--text-primary)' }}>
-                <th style={{ padding: '12px' }}>Rumor Content</th>
-                <th style={{ padding: '12px' }}>Origin Platform</th>
-                <th style={{ padding: '12px' }}>Spread Speed</th>
-                <th style={{ padding: '12px' }}>AI Verification</th>
-                <th style={{ padding: '12px' }}>Action</th>
+                <th style={{ padding: '12px' }}>{t('social.rumorContent')}</th>
+                <th style={{ padding: '12px' }}>{t('social.originPlatform')}</th>
+                <th style={{ padding: '12px' }}>{t('social.spreadSpeed')}</th>
+                <th style={{ padding: '12px' }}>{t('social.aiVerification')}</th>
+                <th style={{ padding: '12px' }}>{t('social.action')}</th>
               </tr>
             </thead>
             <tbody>
